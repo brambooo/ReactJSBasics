@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Component Lifecycle</title>
+
+    <!--REACT LIBRARY ITSELF - USED FOR COMPONENTS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+    <!--REACT LIBARY - RENDERS COMPONENTS TO THE DOME-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+    <!-- JSX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.2/browser.min.js"></script>
+</head>
+<body>
+
+<div id="componentLifecycle"></div>
+<script type="text/babel">
+    // Add a object in the createClass method
+    var LifecycleComponent = React.createClass({
+        // The component have a lifecycle, below will the method be called in order.
+
+        // Custom functions (ARE NOT PART OF THE LIFECYCLE)
+        increment: function () {
+            this.setState({
+                count: this.state.count + 1
+            })
+        },
+
+        // Lifecycle functions
+
+        // 1 called ONCE
+        // BEFORE COMPONENT IS RENDERED
+        // HAPPENS WHEN OUR CLASS (COMPONENT) IS CREATED!!! IT USES BEFORE WE EVEN USE THE COMPONENT!!!s
+        getDefaultProps: function () {
+            console.log('Getting default properties');
+        },
+
+        // 2 called ONCE
+        // BEFORE COMPONENT IS RENDERED
+        getInitialState: function () {
+            console.log('Getting initial state')
+            return ({count: 0})
+        },
+
+        // 3 called ONCE
+        // BEFORE COMPONENT IS RENDERED (ADD TO DOM)
+        componentWillMount: function () {
+            // This function has access to state and props
+            console.log(this.state);
+            console.log(this.props);
+            console.log('Component is mounting');
+        },
+
+        // 4
+        // Happens whenever component changes
+        render: function () {
+            console.log('Component is rendered!');
+            return (
+                    <div>
+                        <p>Aantal: {this.state.count}</p>
+                        <button onClick={this.increment}>Add</button>
+                    </div>
+            )
+        },
+
+        // 5 called ONLY ONCE
+        // AFTER COMPONENT IS RENDERED (STEP 4)
+        // Could do here what we want after component has been rendered!
+        componentDidMount: function () {
+            // Has access to: props, the state and also to the DOM (because DOM now exists)
+            console.log('Component has rendered');
+            console.log(this.state);
+            console.log(this.props);                     // no props atm because none are declared
+            console.log(ReactDOM.findDOMNode(this));     // FindDomNode find the DOMNode we parse in (this = our component here), so console.log this DOM element
+
+            // We could do here anything we want like adding a interval that increases the increment automatically
+            this.interval = setInterval(this.increment, 1000);
+        },
+
+        // 6 called ONLY ONCE
+        // AFTER COMPONENT HAS RENDERED
+        // Happens when component will unmount (REMOVE FROM DOM)
+        componentWillUnmount: function () {
+            console.log('Component unmounted!');
+            // Here we clear up anything when we unmount a component. Important to clear things up before we start going something else after unmounting
+            clearInterval(this.interval);
+        }
+    });
+
+    var LifecycleContainer = React.createClass({
+
+        // Custom methods
+
+        // Mount will be used to render the lifecycleComponent in the renderarea
+        mount: function() {
+            ReactDOM.render(
+                    React.createElement(LifecycleComponent),
+                    document.getElementById('renderArea')
+            )
+        },
+
+        // Remove the DOM node through unmountComponentAtNode.
+        // It unmounts a component from the DOM
+        unmount: function() {
+          ReactDOM.unmountComponentAtNode(document.getElementById('renderArea'));
+        },
+
+        render: function () {
+            console.log('Lifecycle container rendered');
+            return (
+                    <div>
+                        <button onClick={this.mount}>Mount (start) component</button>
+                        <button onClick={this.unmount}>Unmount (remove) component</button>
+                        <div id="renderArea"></div>
+                    </div>
+            )
+        }
+    });
+
+    // Renders component to DOM
+    ReactDOM.render(
+            React.createElement(LifecycleContainer),
+            document.getElementById('componentLifecycle')
+    );
+</script>
+
+</body>
+</html>

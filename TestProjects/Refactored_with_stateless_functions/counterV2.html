@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Counter Project</title>
+
+    <!--REACT LIBRARY ITSELF - USED FOR COMPONENTS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+    <!--REACT LIBARY - RENDERS COMPONENTS TO THE DOME-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+    <!-- JSX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.2/browser.min.js"></script>
+</head>
+<body>
+
+<div id="counterApp"></div>
+
+<script type="text/babel">
+    var counterComponent = React.createClass({
+
+        getDefaultProps: function() {
+            return {
+                valueOne: 1,
+                valueTwo: 5,
+                valueThree: 10,
+                text: 'Add'
+            }
+        },
+        getInitialState: function() {
+            return {count: 0}
+        },
+        incrementBy: function(value) {
+            console.log(this)
+            this.setState({
+                count: this.state.count + value
+            })
+        },
+        // Here we create three reusable buttons
+        // second button has string interpolation ES6
+        render: function() {
+            return(
+                    <div className="container">
+                        <h1>Count: {this.state.count}</h1>
+                        <Button value={this.props.valueOne} text={this.props.text + ' ' + this.props.valueOne} clickHandler={this.incrementBy.bind(this, this.props.valueOne)} />
+                        <Button value={this.props.valueTwo} text={`${this.props.text} ${this.props.valueTwo}`}  clickHandler={this.incrementBy.bind(this, this.props.valueTwo)} />
+                        <Button value={this.props.valueThree} text={this.props.text + ' ' + this.props.valueThree}  clickHandler={this.incrementBy.bind(this, this.props.valueThree)} />
+                    </div>
+            )
+        }
+    });
+
+    // Stateless functions - good way to create reusable items,
+    // We have no hardcoded values in the button, we only declare what we want and assign the values in the html above in the render function.
+    // In this function we create the blueprint of a button that we use in the render function above here
+    var Button = function(props) {
+        return (
+                <button value={props.value} onClick={props.clickHandler}>{props.text}</button>
+        )
+    }
+
+    ReactDOM.render(
+            // Use default props
+//            React.createElement(counterComponent),
+            // Assign custom values to props
+            React.createElement(counterComponent, {valueOne:1000, valueTwo:2000, valueThree:3000}),
+            document.getElementById('counterApp')
+    );
+</script>
+
+</body>
+</html>

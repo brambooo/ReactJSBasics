@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stateless Functional Components</title>
+
+    <!--REACT LIBRARY ITSELF - USED FOR COMPONENTS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+    <!--REACT LIBARY - RENDERS COMPONENTS TO THE DOME-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+    <!-- JSX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.2/browser.min.js"></script>
+</head>
+<body>
+<div id="taskList"></div>
+<script type="text/babel">
+    // TaskList Component
+    var TaskList = React.createClass({
+        getInitialState: function () {
+            // Array with tasks, every task is an object
+            return {
+                tasks: [
+                    {id: 1, 'title': 'Update front-end'},
+                    {id: 2, 'title': 'Create new Flight API'},
+                    {id: 3, 'title': 'Create associations between models'}
+                ]
+            }
+        },
+        // Render tasks based on stateless functional components, that we have declared below (see Task function)
+        render: function () {
+            return (<div>
+                        <ul>
+                            {this.state.tasks.map(function (task) {
+                                return <Task key={task.id} title={task.title}/>
+                            })}
+                        </ul>
+                    </div>
+            )
+        }
+    });
+
+    // Stateless function components - allows to make reusable components, that don't need to mutate state.
+    // Only have to get the proper props that we like to render and place them inside.
+
+    // Stateless function components can be seen as a: simple render method. It's just the content that we like to return.
+    // We create them simple as to declare a function
+    // If we want to add properties to the stateless function, add props as parameter
+
+
+    // Simple stateless functional component. As you can see it just returns some content, in this case a task li item with a title.
+    // Keep in mind we don't add a state here, just kind of a template that we use in a component.
+    var Task = function (props) {
+        return (
+                <li>Task: {props.title} </li>
+        )
+    };
+
+    // Render component to the DOM
+    ReactDOM.render(
+            React.createElement(TaskList),
+            document.getElementById('taskList')
+    );
+
+</script>
+</body>
+</html>

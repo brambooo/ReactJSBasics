@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document object model</title>
+
+    <style>
+        #container {
+            background: blue;
+            width: 500px;
+            height: 500px;
+            display: block;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        #square {
+            background: yellow;
+            width: 50px;
+            height: 50px;
+            position: absolute;
+        }
+
+    </style>
+</head>
+<body>
+<p>HTML DOM wordt gebruikt als standaard om HTML elementen te kunnen veranderen, toe te voegen en verwijderen via JS.</p>
+<p>Het DOM is toegankelijk via JavaScript, (en ook andere programmeertalen). </p>
+<p>In het DOM zijn alle elementen gedefineerd als objecten.</p>
+
+<div id="container">
+    <div id="square"></div>
+</div>
+<div class="actions">
+    <button id="right" onclick="moveToRight()">Rechts</button>
+    <button id="down" onclick="moveToBottom()">Beneden</button>
+</div>
+
+
+
+</div>
+<script>
+    // Get container sizes
+    var containerWidth = document.getElementById('container').offsetWidth;
+    var containerHeight = document.getElementById('container').offsetHeight;
+
+
+    var square = document.getElementById('square');
+
+    var offsetLeft = 0;
+    var offsetTop = 0;
+
+    calculateMaxWidth();
+
+    function moveToRight() {
+        console.log('naar rechts');
+        offsetLeft += 50;
+        if(offsetLeft >= containerWidth){
+            alert('Cannot move to the right anymore!');
+            document.getElementById('right').disabled = true;
+        } else {
+            console.log('Updated left offset: ' + offsetLeft);
+            square.style.left =  offsetLeft + 'px';
+        }
+    }
+
+    function moveToBottom() {
+        offsetTop += 50;
+        if(offsetTop < containerHeight) {
+            square.style.top = offsetTop + 'px';
+        } else {
+            alert('Cannot go futher down!');
+            document.getElementById('down').disabled = true;
+        }
+    }
+
+    function calculateMaxWidth() {
+        var container = document.getElementById('container');
+        console.log(container.offsetWidth);
+    }
+
+
+</script>
+</body>
+</html>

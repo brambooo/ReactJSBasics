@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lifecycle example with update methods</title>
+
+
+    <!--REACT LIBRARY ITSELF - USED FOR COMPONENTS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+    <!--REACT LIBARY - RENDERS COMPONENTS TO THE DOME-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+    <!-- JSX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.2/browser.min.js"></script>
+</head>
+<body>
+<div id="likesApp"></div>
+<script type="text/babel">
+    /**
+     * In this example I have created a simple like app that receives updated props with the componentWillReceiveProps method.
+     * This example is explicit to test the componentWillReceiveProps method. Watch see console what happens when you click the button which method is called.
+     */
+    var LikesComponent = React.createClass({
+
+        // Custom methods
+        updateLikes: function () {
+            ReactDOM.render(
+                    // Assign + 1 to likes property of this component
+                    React.createElement(LikesComponent, {likes: this.props.likes +1}),
+                    document.getElementById('likesApp')
+            )
+        },
+
+        getDefaultProps: function () {
+            return ({
+                likes: 0
+            })
+        },
+        getInitialState: function () {
+            return ({
+                popular: false
+            })
+        },
+        componentWillReceiveProps: function(updatedProps) {
+            console.log(updatedProps);
+            console.log('componentWillReceiveProps called');
+            // Validate likes
+            if(updatedProps.likes >= 10) {
+                this.setState({
+                    popular: true
+                });
+            }
+        },
+        // Must return whether or not the component should be updated
+        shouldComponentUpdate: function(props, nextState) {
+            console.log('shouldComponentUpdate called');
+            console.log('shouldComponentUpdate props:', props);
+            console.log('shouldComponentUpdate nextState: ', nextState);
+            return true
+        },
+        render: function() {
+            console.log('Component rendered!');
+            return (
+                    <div>
+                        <p>Amount of likes: {this.props.likes}!</p>
+                        <h1>{this.state.popular ? 'Popular profile!' : null}</h1>
+                        <button onClick={this.updateLikes}>Like</button>
+                    </div>
+            )
+        },
+
+        // ComponentDidUpdate - called after initial render
+        // ComponentDidUpdate should be used as an opportunity to operate on the DOM, once our component is updated!
+        // We have also access here to the DOM with REACTDOM.findDOMNode
+        componentDidUpdate: function(prevProps, prevState) {
+            console.log('Previous props ', prevProps);
+            console.log('Previous state ', prevState);
+            console.log(ReactDOM.findDOMNode(this));
+        }
+
+    });
+
+    // Render component to DOM
+    ReactDOM.render(
+            React.createElement(LikesComponent),
+            document.getElementById('likesApp')
+    );
+</script>
+</body>
+</html>
