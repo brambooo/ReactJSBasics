@@ -2,9 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Stateless functional component</title>
+
+    <!--REACT LIBRARY ITSELF - USED FOR COMPONENTS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+    <!--REACT LIBARY - RENDERS COMPONENTS TO THE DOME-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+    <!-- JSX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.2/browser.min.js"></script>
 </head>
 <body>
-$END$
+<div id="counterApp"></div>
+<script type="text/babel">
+
+    // Component
+    class Counter extends React.Component {
+
+        // Constructor
+        constructor(props) {
+            super(props);
+            // Set initial state
+            this.state = { count: 0};
+            // Bind
+            this.click = this.click.bind(this);
+        }
+
+        click() {
+            console.log('Custom click method called!');
+        }
+
+        render() {
+            return(
+                    <div>
+                        <Button clickHandler={this.click} title="Klik"/>
+                    </div>
+            )
+        }
+    }
+    // Stateless ES6 function - const is used because it doesn't change
+    const Button = (props) => {
+        return (
+                <button onClick={props.clickHandler}>{props.title}</button>
+        )
+    }
+
+    // Specifying default props
+    Counter.defaultProps = {title:'Click button'}
+
+    // Render to DOM
+    ReactDOM.render(
+            React.createElement(Counter),
+            document.getElementById('counterApp')
+    )
+</script>
+
 </body>
 </html>
